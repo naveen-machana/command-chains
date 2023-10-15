@@ -13,22 +13,18 @@ import java.util.Map;
 public class FlowExecutor {
 
     @Autowired
-    Map<String, List<Task>> tasksByFlowType;
-
-    @Value("flow.type")
-    private String flowType;
+    List<Task> tasksForFlow;
 
     public Object executeSomeOperation(Object input) {
         Map<String, Object> inputMap = new HashMap<>();
-        inputMap.put("inputObject", input);
+        inputMap.put("input-object", input);
 
-        List<Task> tasks = tasksByFlowType.get(flowType);
-        for (Task task : tasks) {
+        for (Task task : tasksForFlow) {
             boolean shouldContinue = task.handleTask(inputMap);
             if (!shouldContinue) {
-                return inputMap.get("return");
+                return inputMap.get("return-value");
             }
         }
-        return inputMap.get("return");
+        return inputMap.get("return-value");
     }
 }
